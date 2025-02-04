@@ -1,0 +1,590 @@
+---
+title: "spotifyProject"
+author: "Bora Karayel"
+date: "`r Sys.Date()`"
+output: html_document
+---
+<div style="background-color:#2f2f2f; color:#9e9e9e; padding:5px">
+
+# <span style="color:#25d865"> The Great Spotify Project </span>
+## <span style="color:#25d865">An Analysis Based on the Year 2023 Data</span>
+### [<span style="color:#25d865">Table of Contents </span>](#table)  
+[<span style="color:#25d865">Scenario </span>](#scenario)<br>
+[<span style="color:#25d865">About Spotify </span>](#about)<br>
+[<span style="color:#25d865">1. Ask Phase </span>](#ask_phase_1)<br>
+[<span style="color:#25d865">1.1. Business Task</span>](#business)<br>
+[<span style="color:#25d865">2. Prepare Phase </span>](#prepare_phase_2)<br>
+&nbsp;[<span style="color:#25d865">2.1. Data Source </span>](#dataSource)<br>
+&nbsp;[<span style="color:#25d865">2.2. Information About The Dataset and Data Organization </span>](#infoAbout)<br>
+[<span style="color:#25d865">3. Process Phase </span>](#process_phase_3)<br>
+&nbsp;[<span style="color:#25d865">3.1. Loading Packages </span>](#loadingPackages)<br>
+&nbsp;[<span style="color:#25d865">3.2. Importing Dataset </span>](#importing)<br>
+&nbsp;[<span style="color:#25d865">3.3. Previewing the Data Frame </span>](#preview)<br>
+&nbsp;[<span style="color:#25d865">3.4. Cleaning And Formatting </span>](#cleaning)<br>
+&nbsp;&nbsp;[<span style="color:#25d865">3.4.1. Data Cleaning </span>](#dataCleaning)<br>
+&nbsp;&nbsp;[<span style="color:#25d865">3.4.2. Data Formatting </span>](#dataFormatting)<br>
+&nbsp;&nbsp;[<span style="color:#25d865">3.4.3. Merging and Standardizing the Date Column </span>](#mergingDate)<br>
+&nbsp;&nbsp;[<span style="color:#25d865">3.4.4 Cleaning and Converting Character Columns to Numeric or Integer Values </span>](#converting)<br>
+[<span style="color:#25d865">4. Analyze and Share Phase </span>](#analyze_phase_4)<br> 
+&nbsp;[<span style="color:#25d865">4.1. What are the Reflections of the Popular Songs on Other Platforms? </span>](#popularSongs)<br>
+&nbsp;[<span style="color:#25d865">4.2. Is there a correlation between BPM and Danceability Values? </span>](#correlation)<br>
+&nbsp;[<span style="color:#25d865">4.3. Is There a Common Pattern in BPM and Danceability? </span>](#commonPattern)<br>
+&nbsp;[<span style="color:#25d865">4.4. Do Popular Songs Have High Energy and High Danceability Values? </span>](#highEnergy)<br>
+&nbsp;[<span style="color:#25d865">4.5. Is There a Popular “Word” for a Song Name? </span>](#popularWords)<br>
+[<span style="color:#25d865">5. Act Phase </span>](#act_phase_5)<br>
+
+## <span style="color:#25d865"> Scenario </span> <a class="anchor" 
+id="about"></a>
+This analysis explores key audio features—danceability, energy, loudness, and 
+valence—to identify trends in Spotify's most streamed songs. The dataset is 
+preprocessed by handling missing values and categorizing songs by energy and 
+danceability levels for structured comparisons.
+
+Visualizations, including bar charts and word clouds, highlight patterns in 
+popular music. The findings help identify which characteristics contribute to 
+a song’s success, providing insights for artists, producers, and music analysts.
+
+## <span style="color:#25d865"> About Spotify </span> <a class="anchor" 
+id="about"></a>
+Spotify is a popular music streaming platform launched in 2008 that allows 
+users to listen to millions of songs, podcasts, and audio books. With a free, 
+ad-supported version and premium subscription options, Spotify provides access 
+to curated playlists, personalized recommendations, and offline listening. Its 
+algorithm uses user preferences and listening history to suggest content, 
+making discovery seamless. Spotify supports cross-device listening and is 
+available on mobile, desktop, smart speakers, and other devices. It also 
+empowers artists to share their music globally, offering detailed analytics 
+through Spotify for Artists. Known for its intuitive interface, Spotify is a 
+leader in the audio streaming industry.
+
+
+## <span style="color:#25d865"> 1. Ask Phase </span> <a class="anchor" 
+id="ask_phase_1"></a>
+This dataset is analyzed to uncover trends in song releases, danceability,
+acoustics, and popularity metrics. Optimal characteristics and timing for 
+future songs are identified to maximize streaming performance and enhance 
+audience engagement.
+
+### <span style="color:#25d865"> 1.1 Business Task </span> <a class="anchor" 
+id="business"></a>
+Analyze the Most Streamed Spotify Songs 2023 dataset to determine the release 
+months when danceable songs are most common, identify key trends in the top 
+1,000 songs, and evaluate the time it takes for songs to reach their peak 
+popularity after release. Use these insights to develop actionable strategies 
+for optimizing future song releases and maximizing audience engagement.
+
+-During which months of the year are danceable songs mostly released?
+
+-What are the trends in the top 1000 songs of 2023?
+
+-How many days after the release date does it take for songs to reach their 
+highest level?
+
+-How can these trends be applied for future songs?
+
+
+## <span style="color:#25d865"> 2. Prepare Phase </span> <a class="anchor" 
+id="prepare_phase_2"></a>
+
+
+### <span style="color:#25d865"> 2.1 Data Source </span> <a class="anchor" 
+id="dataSource"></a>
+In this analysis, the dataset titled [Most Streamed Spotify Songs 2023](https://www.kaggle.com/datasets/nelgiriyewithana/top-spotify-songs-2023)
+was utilized, obtained from Kaggle.
+
+>" This dataset contains a comprehensive list of the most famous songs of 2023 as
+listed on Spotify. The dataset offers a wealth of features beyond what is 
+typically available in similar datasets. It provides insights into each song's 
+attributes, popularity, and presence on various music platforms. The dataset
+includes information such as track name, artist(s) name, release date, Spotify
+playlists and charts, streaming statistics, Apple Music presence, Deezer 
+presence, Shazam charts, and various audio features. "
+
+### <span style="color:#25d865"> 2.2 Information About The Dataset and Data Organization </span> <a class="anchor" id="infoAbout"></a>
+The dataset comprises the 953 most-streamed songs on Spotify in 2023 and is 
+provided as a single .csv file for analysis.
+
+*	track_name: Name of the song
+*	artist(s)_name: Name of the artist(s) of the song
+*	artist_count: Number of artists contributing to the song
+*	released_year: Year when the song was released
+*	released_month: Month when the song was released
+*	released_day: Day of the month when the song was released
+*	in_spotify_playlists: Number of Spotify playlists the song is included in
+*	in_spotify_charts: Presence and rank of the song on Spotify charts
+*	streams: Total number of streams on Spotify
+*	in_apple_playlists: Number of Apple Music playlists the song is included in
+*	in_apple_charts: Presence and rank of the song on Apple Music charts
+*	in_deezer_playlists: Number of Deezer playlists the song is included in
+*	in_deezer_charts: Presence and rank of the song on Deezer charts
+*	in_shazam_charts: Presence and rank of the song on Shazam charts
+*	bpm: Beats per minute, a measure of song tempo
+*	key: Key of the song
+*	mode: Mode of the song (major or minor)
+*	danceability_%: A percentage indicating how well-suited the song is for dancing.
+*	valence_%: Positivity of the song's musical content
+*	energy_%: Perceived energy level of the song
+*	acousticness_%: Amount of acoustic sound in the song
+*	instrumentalness_%: Amount of instrumental content in the song
+*	liveness_%: Presence of live performance elements
+*	speechiness_%: Amount of spoken words in the song
+
+## <span style="color:#25d865"> 3. Process Phase </span> <a class="anchor" 
+id="process_phase_3"></a>
+The analysis will be conducted in R due to its accessibility, ability to 
+handle large datasets, and robust tools for creating data visualizations to 
+effectively share results with stakeholders.
+
+### <span style="color:#25d865"> 3.1 Loading Packages </span> <a class="anchor" id="loadingPackages"></a>
+The following packages will be used for our analysis:
+
+* tidyverse - essential for data manipulation and visualization.
+* dplyr - ease data manipulation with functions for filtering, summarizing, and
+transforming data.
+* janitor - streamlines cleaning messy data.
+* lubridate - simplifies working with date-time data.
+* ggpubr - simplifies creating publication-ready plots.
+* skimr - provides quick, detailed data summaries.
+* here - manages file paths efficiently and consistently.
+* ggrepel - enhances readability by repelling overlapping labels.
+* ggplot2: A versatile package for creating static, customizable data 
+visualizations
+* tm - simplifies text mining processes, offering tools for text manipulation,
+processing, and analysis.
+* wordcloud - generates visual word clouds.
+* tidytext - enables tidy, efficient text mining.
+
+
+```
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("janitor")
+install.packages("lubridate")
+install.packages("ggpubr")
+install.packages("here")
+install.packages("skimr")
+install.packages("ggrepel")
+install.packages("ggplot2")
+install.packages("fmsb")
+install.packages("tm")
+install.packages("wordcloud")
+install.packages("tidytext")
+install.packages("gridExtra")
+```
+```
+library(tidyverse)
+library(dplyr)
+library(janitor)
+library(lubridate)
+library(ggpubr)
+library(here)
+library(skimr)
+library(ggrepel)
+library(ggplot2)
+library(fmsb)
+library(gridExtra)
+library(tm)
+library(wordcloud)
+library(tidytext)
+```
+
+### <span style="color:#25d865"> 3.2 Importing Datasets </span> 
+<a class="anchor" id="importing"></a>
+First, the dataset is imported for use in our analysis, and the necessary 
+evaluations are made.
+```
+# Load data from a .csv file using read.csv()
+spotify_data <- 
+read.csv("~/Data Analysis/Projects/spotifyAnalysis/spotify2023.csv")
+```
+```
+# Check the imported data frame
+View(spotify_data)
+```
+
+### <span style="color:#25d865"> 3.3 Previewing the Data Frame
+</span> <a class="anchor" id="preview"></a>
+
+The data frames previously created will be previewed, and a search will be 
+conducted to identify key details and common points across each data frame.
+
+```
+# View first few rows and structure.
+head(spotify_data)
+str(spotify_data)
+```
+
+### <span style="color:#25d865"> 3.4 Cleaning And Formatting
+</span> <a class="anchor" id="cleaning"></a>
+Before proceeding, it is essential to ensure that the data frames are thoroughly
+cleaned and properly formatted. This step is vital for ensuring accurate analysis
+and reliable results.
+
+### <span style="color:#25d865"> 3.4.1 Data Cleaning </span> <a class="anchor" id="dataCleaning"></a>
+Data cleaning is conducted to handle any duplicate entries or NA values present
+in the dataset.
+```
+# Remove duplicate rows and rows with NA values from "spotify_data" data frame
+spotify_data_cleaned <- spotify_data %>%
+  distinct() %>%
+  drop_na()
+```
+
+A thorough check is performed to ensure that there are no remaining duplicates 
+or missing values in the dataset.
+```
+# Checking for duplicates in each dataset.
+sum(duplicated(spotify_data_cleaned))
+```
+### <span style="color:#25d865"> 3.4.2 Data Formatting </span> <a class="anchor" id="dataFormatting"></a>
+Column names are being standardized by converting them to lowercase to ensure 
+consistency across datasets before merging. The clean_names() function from the 
+janitor package is used for this purpose, as it automatically transforms column
+names into a consistent and clean format. This includes converting them to
+lowercase, removing special characters, and replacing spaces with underscores,
+improving readability and compatibility during analysis.
+```
+# Clean and check the column names
+spotify_data_cleaned <- clean_names(spotify_data_cleaned)
+colnames(spotify_data_cleaned)
+```
+
+### <span style="color:#25d865"> 3.4.3 Merging and Standardizing the Date Columns </span> <a class="anchor" id="mergingDate"></a>
+Upon examining the dataset, it was observed that the date information is
+stored across three separate columns: released_year, released_month, and 
+released_day. To streamline the analysis, these columns need to be merged into a
+single date column. This transformation simplifies the analysis process, 
+enhances compatibility with data analysis libraries, and facilitates easier and
+more effective data visualization.
+```
+# Create a single date column, then remove year, month, day columns
+spoty <- spotify_data_cleaned %>%
+mutate(date = as.Date(with(., sprintf("%04d-%02d-%02d",
+released_year,
+released_month, 
+released_day)))) %>%
+select(-released_year,
+-released_month,
+-released_day)
+```
+The released_year, released_month, and released_day columns were combined into a
+single string using the sprintf() function. This string was then converted into
+a proper Date object using the as.Date() function to standardize the date format
+for further analysis.
+
+### <span style="color:#25d865"> 3.4.4 Cleaning and Converting Character Columns to Numeric or Integer Values </span> <a class="anchor" id="converting"></a>
+In order for the analysis to function properly, it is necessary for some 
+character columns to be converted to numeric value. This conversion must be 
+completed to ensure that the data is processed correctly and without errors, 
+allowing the analysis to proceed as intended. Since a different problem is 
+associated with each column, each one is discussed separately.
+```
+# Clean and convert 'streams' column to numeric values.
+spoty<- spoty[grepl("^[0-9]+$", spoty$streams), ]
+spoty$streams <- gsub("[^0-9]", "", spoty$streams)
+spoty$streams[spoty$streams == "" | is.na(spoty$streams)] <- 0
+# Converted to numeric due to 32-bit integer limitations.
+spoty$streams <- as.numeric(spoty$streams)
+
+```
+```
+# Clean and convert 'in_shazam_charts' column to integers.
+spoty$in_shazam_charts <- gsub("[^0-9]", "", spoty$in_shazam_charts)
+spoty$in_shazam_charts[spoty$in_shazam_charts == "" |
+    is.na(spoty$in_shazam_charts)] <- 0
+spoty$in_shazam_charts <- as.integer(spoty$in_shazam_charts)
+```
+```
+# Clean and convert 'in_deezer_playlists' column to integers.
+spoty$in_deezer_playlists <- gsub("[^0-9]", "", spoty$in_deezer_playlists)
+spoty$in_deezer_playlists[spoty$in_deezer_playlists == "" |
+    is.na(spoty$in_deezer_playlists)] <- 0
+spoty$in_deezer_playlists <- as.integer(spoty$in_deezer_playlists)
+```
+```
+# Check the final result
+str(spoty)
+```
+
+## <span style="color:#25d865"> 4. Analyze and Share Phase </span> <a class="anchor" 
+id="analyze_phase_4"></a>
+The top-streamed songs of 2023 on Spotify will be analyzed to explore how these 
+insights can guide Spotify's marketing strategy.
+
+### <span style="color:#25d865"> 4.1 What are the Reflections of the Popular Songs on Other Platforms? </span> <a class="anchor" id="popularSongs"></a>
+In this section, the top 10 most-streamed songs on Spotify released in 2023 are
+selected and their rankings on Spotify are compared with those on other 
+platforms. This comparison is intended to reveal the relative prominence of 
+these songs across different platforms, showing both their popularity and the
+similarities in rankings between Spotify and other streaming services. The
+results of this analysis can be used in future studies to explore trends in 
+music consumption and platform performance.
+
+```
+# Filter and select the top 10 most streamed songs after 2023-01-01
+spoty_2023 <- spoty %>%
+  filter(date > "2023-01-01") %>%
+  arrange(desc(streams)) %>%
+  head(n=10) %>%
+  select(1, 5, 8, 10, 11)
+```
+```
+# Reorder the data and rename column names for better visualization
+spoty_2023 <- spoty_2023 %>%
+  arrange(in_spotify_charts) %>%
+  set_names(c("Song Name", 
+     "Spotify", "Apple Music",
+     "Deezer", "Shazam"))
+```
+At this stage, only the columns useful for the analysis are retained in the 
+dataset. The column names are simplified for clarity. In the next step, the 
+dataset will be transposed for use in the radar chart.
+```
+# Transpose the data to switch rows and columns 
+spoty_2023_t <- spoty_2023 %>%
+  column_to_rownames("Song Name") %>%
+  t() %>%
+  as.data.frame() 
+
+# Add rows for max and min values to enhance visualization
+spoty_2023_t <- rbind(rep(300,10) , rep(0,10) , spoty_2023_t)
+```
+```
+# Define colors for each platform for better distinction
+colors_in=c( "#25d865", "#fc3c44", "#a53eff", "#088cff"  )
+
+# Create the radar chart with better visualization settings
+radarchart(spoty_2023_t, axistype=2,
+pcol=colors_in,
+axislabcol="lightgrey",
+plwd=2,
+vlcex=.8,
+title = "Comparison of Spotify's 10 Most Streamed  
+Songs Across Other Platforms in 2023")
+
+# Add a legend with the appropriate labels for platforms
+legend(x=1.1, y=1.3, 
+legend = rownames(spoty_2023_t[-c(1,2),]),
+bty = "n", pch=20, col=colors_in,
+text.col = "black", cex=0.8, pt.cex=3)
+
+```
+### <span style="color:#25d865"> 4.2 Is There a Correlation Between BPM and Danceability Values? </span> <a class="anchor" id="correlation"></a>
+For this analysis, the songs with the higher danceability rate than average 
+are selected, regardless of their release year. A scatter plot will then be 
+generated to visualize the distribution of danceability across these songs.
+
+```
+# Sort and filter songs with above-average danceability.
+spoty_dance <- spoty %>%
+  arrange(desc(danceability)) %>%
+  select(1, 2, 12, 15)%>%
+  filter(danceability > mean(danceability))
+
+```
+In the data frame above, only the song name, artist name, BPM, and 
+danceability columns were included, and only songs with above-average 
+danceability values were selected.
+
+```
+# Scatter plot with trend line and Pearson correlation.
+ggplot(spoty_dance, aes(x=bpm, y=danceability)) + 
+    geom_point(
+     color="#25d865",
+        fill="#25d865",
+        shape=21,
+        alpha=0.5,
+        size=2,
+        stroke = 1 )+
+geom_smooth(method=lm, 
+formula = y ~ x, color="White", 
+linewidth=1, fill="#69b3a2", se=TRUE)+
+stat_cor(method = "pearson", label.x = 65, label.y = 56, color="#25d865", size= 5)+
+scale_y_continuous(limits = c(55, NA))+
+theme(
+        panel.background = element_rect(fill = "#2f2f2f",
+        color = NA),
+        plot.background = element_rect(fill = "lightgray",
+        color = NA),
+        panel.grid.major = element_line(color = "gray80"),    
+        panel.grid.minor = element_line(color = "gray80")     
+    )
+```
+### <span style="color:#25d865"> 4.3 Is There a Common Pattern in BPM and Danceability?  </span> <a class="anchor" id="commonPattern"></a>
+A different graph is created to establish a commonality over a similar data 
+group, as no positive correlation between BPM and danceability is observed.
+```
+# Sort and filter songs with above-average danceability.
+spoty_dance_heat <- spoty %>%
+  arrange(desc(danceability)) %>%
+  select(1, 2, 12, 15)
+
+```
+In the process of preparing the graph, a more comprehensive data frame is 
+generated by removing the previous filter on danceability, allowing all 
+available data to 
+be included.
+```
+# Added a scatter plot with 2D density contours and custom styling.
+ggplot(spoty_dance_heat, aes(x = bpm, y = danceability)) +
+  geom_point(color="#25d865") + 
+  geom_density_2d(color="yellow", linewidth=0.7) +
+  scale_x_continuous(limits = c(70, 190), breaks = seq(0, 200, by = 10) ) + 
+  scale_y_continuous(limits = c(40, 100), breaks = seq(0, 180, by = 10)) + 
+  theme(
+        panel.background = element_rect(fill = "#2f2f2f",
+        color = NA),
+        plot.background = element_rect(fill = "gray90",
+        color = NA)
+    )
+```
+### <span style="color:#25d865"> 4.4 Do Popular Songs Have High Energy and High Danceability Values? </span> <a class="anchor" id="highEnergy"></a>
+In this analysis phase, the danceability and energy levels of the most streamed
+songs are systematically examined. To enhance clarity and interpretability, each
+song is categorized into four distinct levels based on its danceability and 
+energy, allowing for a more structured evaluation of trends and patterns.
+```
+# Categorized songs by energy and danceability into four levels.
+spoty_levels <- spoty %>%
+  arrange(desc(energy)) %>%
+  select(1, 2, 15, 17)%>%
+  mutate(energy_level = case_when(
+    energy < 30 ~ "Low",
+    energy >= 30 & energy < 60 ~ "Mid",
+    energy >= 60 & energy < 80 ~ "High",
+    energy >= 80 ~ "Very High")) %>%
+  mutate(dance_level = case_when(
+    danceability < 30 ~ "Low",
+    danceability >= 30 & danceability < 60 ~ "Mid",
+    danceability >= 60 & danceability < 80 ~ "High",
+    danceability >= 80 ~ "Very High"))
+    
+# Counted the number of songs per energy level.
+energy_avg <- spoty_levels %>%
+  group_by(energy_level) %>%
+  summarise(avg_energy=n())
+  
+# Counted the number of songs per danceability.
+dance_avg <- spoty_levels %>%
+  group_by(dance_level) %>%
+  summarise(avg_dance = n()) 
+```
+The analysis shows that energy and danceability levels follow similar patterns
+within the data groups. This similarity will become more apparent in the graph, 
+where the alignment of data points will emphasize the close relationship between
+the two variables.
+```
+# First plot: Average Energy by Energy Level
+plot1 <- ggplot(energy_avg, aes(x = energy_level, y = avg_energy)) +
+  geom_bar(stat = "identity", fill = "#25d865", show.legend = FALSE) +
+  labs(title = "Average Energy by Energy Level", 
+       x = "Energy Level", 
+       y = "Average Energy") +
+  theme(
+        panel.background = element_rect(fill = "#2f2f2f",
+        color = NA),
+        plot.background = element_rect(fill = "gray90",
+        color = NA)
+    )
+
+# Second plot: Average Danceability by Danceability Level
+plot2 <- ggplot(dance_avg, aes(x = dance_level, y = avg_dance)) + 
+  geom_bar(stat = "identity", fill = "#25d865", show.legend = FALSE) +
+  labs(title = "Average Danceability by Danceability Level", 
+       x = "Danceability Level", 
+       y = "Average Danceability") +
+ theme(
+        panel.background = element_rect(fill = "#2f2f2f",
+        color = NA),
+        plot.background = element_rect(fill = "gray90",
+        color = NA)
+    )
+    
+grid.arrange(plot1, plot2, ncol = 2)
+```
+
+### <span style="color:#25d865"> 4.5 Is there a popular “word” for a song name?
+</span> <a class="anchor" id="popularWords"></a>
+To assess whether a clear pattern exists in the song titles, a cloud of the most
+frequently used words is generated. This visualization helps identify recurring 
+themes or trends within the dataset. For this analysis, a simple word cloud is 
+created using the wordcloud package, allowing for an intuitive representation 
+of word frequency and prominence in the song titles.
+```
+words_to_remove <- c("song", "music", "feat", "remastered", 
+"version", "remix", "vol", "session", "sessions", "edit")
+
+text_data <- spoty$track_name
+text_data <- iconv(text_data, from = "latin1", to = "UTF-8")
+text_data <- tolower(text_data)
+text_data <- removeNumbers(text_data)
+text_data <- removePunctuation(text_data)
+text_data <- removeNumbers(text_data)
+text_data <- stripWhitespace(text_data)
+text_data <- removeWords(text_data, stopwords("en"))
+text_data <- removeWords(text_data, words_to_remove)
+```
+```
+par(bg="#2f2f2f")
+wordcloud(words = text_data, min.freq = 5,
+scale = c(7, 0.2), colors = "#25d865", random.order = FALSE)
+```
+## <span style="color:#25d865"> 5. Act Phase  </span> <a class="anchor" id="act_phase_5"></a>
+As a result of the data examination and analysis, the following recommendations
+have been developed:
+
+   * When the 2023 data was examined, it was found that the 10 most streamed 
+   songs on Spotify are similar to those on Deezer. However, a slight similarity
+   was observed with the Apple Music application. On the other hand, a close 
+   resemblance can be established between Spotify and Shazam, with 6 songs 
+   appearing in both platforms' charts, while the remaining 4 songs were not 
+   present in Shazam’s chart. Based on these findings, it can be inferred that 
+   Spotify and Deezer users may exhibit similar behaviors due to their 
+   preference for similar songs. By closely examining Deezer's operations, 
+   various benchmarks can be created. Additionally, exploring the countries 
+   where both applications are most widely used and analyzing the gender 
+   distribution of their users may reveal further similarities. This 
+   understanding can be used to better comprehend users' preferences and 
+   expectations.
+
+   * When the songs with high danceability were examined, it was observed that 
+   these songs are not necessarily in high tempos. In other words, no clear and
+   strong relationship was found between BPM and danceability. This suggests 
+   that users evaluate elements other than tempo when assessing a song’s 
+   danceability. Interestingly, no songs with a danceability score of 85 or 
+   above were found to have a BPM above 150. However, songs with a danceability 
+   score between 80-100 were observed to have a BPM in the range of 100 to 150. 
+   This indicates that users still expect songs to have a certain tempo to be 
+   considered danceable.
+   
+   * In Section 4.3, where the danceability and BPM values were analyzed in 
+   greater detail, two important findings were revealed. The top and narrowest 
+   ring of the graph can be regarded as the area where the optimal ratio is 
+   achieved. This region also showed a high density of songs. Secondly, 
+   attention should be paid to the second ring surrounding this area, where 
+   songs clustered around 100 and 120 BPM, with danceability values ranging 
+   between 70 and 80. By focusing on these two regions, the foundation of a 
+   highly danceable song can be identified.
+   
+   * When the songs were classified into levels according to their energy and 
+   danceability scores, it was found that their distribution is surprisingly 
+   similar. This suggests that users evaluate songs in terms of both energy and 
+   danceability together.
+   
+   * The word cloud created in Section 4.5 revealed unexpected insights. Several
+   words that were not anticipated appeared in the cloud, which was generated by
+   analyzing the track_name column containing only song names. The results can
+   be divided into two groups: “Christmas,” “Spiderman,” and “Spiderverse,” as 
+   well as “BTS,” “Metro Boomin,” and “BZRP.” In addition to confirming the 
+   continued popularity of Christmas-themed songs, it was clearly seen that 
+   collaborations with successful movies have a significant positive impact on 
+   songs' streamings. Even though common words such as "version," "feat," and 
+   "vol" were excluded, the collaborators involved in these partnerships remain 
+   present in the track_name column. This further highlights the importance of 
+   popular names like BTS and Metro Boomin, which were prominently featured in 
+   the word cloud. This is crucial in understanding their popularity.
+
+
+</div>
+
+
